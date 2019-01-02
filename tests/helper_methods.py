@@ -20,6 +20,16 @@ def user_logout(self, token):
                 content_type='application/json', 
                 headers=dict(Authorization="Bearer " + token))
 
+def get_all_users(self):
+        return self.client.get(
+                'api/v1/register',
+                content_type='application/json')
+
+def get_specific_user(self):
+        return self.client.get(
+                'api/v1/register/1',
+                content_type='application/json')
+
 def create_product(self, data, token):
         return self.client.post(
                 '/api/v1/products',

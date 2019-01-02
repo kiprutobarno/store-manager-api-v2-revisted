@@ -30,7 +30,6 @@ def attendant_required(fn):
         return fn(*args, **kwargs)
     return wrapper
 
-
 def user(email, is_admin, password):
     """ This function returns true if a user is created successfully """
     email=email
@@ -59,15 +58,6 @@ def product_update(product_name, category, quantity, price, product_id):
     product_validation(product_name, category, quantity, price)
     return Product.update_product(product_name, category, quantity, price, product_id)
 
-def validate_sale(product_id, quantity):
-    """ validate sale """
-    return ValidateSale.validate(product_id, quantity)
-
-def product_sale(product_id, quantity):
-    """ custom product sale """
-    validate_sale(product_id, quantity)
-    if Sale.create_sale(product_id, quantity)[1]:
-        return Sale.create_sale(product_id, quantity)[0]
 
 def error_handling(error):
     """ This function returns well formatted key error messages """
@@ -87,7 +77,9 @@ class Register(Resource):
 
     def get(self):
         users=User.get_users()
-        return make_response(jsonify({ "message": "success", "users": users }), 200)
+        if len(users)>0:
+            return make_response(jsonify({ "message": "success", "users": users }), 200)
+        return make_response(jsonify({ "message": "Sorry, no user(s) available" }), 404)
 
 class GetSpecificUser(Resource):
     def get(self, user_id):
@@ -160,7 +152,7 @@ class UpdateProduct(Resource):
                 if product_id==data['product_id']:  
                     product_update(data['product_name'], data['category'], data['quantity'], data['unit_price'], data['product_id'])
                     return make_response(jsonify({'message': 'Update successful', 'product': Product.get_specific_product(product_id)}), 201)
-                return make_response(jsonify({'message': 'Update failed, check product_id'}), 400)
+                # return make_response(jsonify({'message': 'Update failed, check product_id'}), 400)
             return make_response(jsonify({'message': 'Sorry, such a product does not exist'}), 400)
         except KeyError as error:
             return error_handling(error)

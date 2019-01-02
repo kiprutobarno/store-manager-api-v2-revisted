@@ -35,6 +35,15 @@ class SaleTestCase(BaseTestCase):
         resp = get_all_sales(self, token)
         self.assertEqual(resp.status_code, 200)
 
+    def test_get_all_sales_attendant(self):
+        user_registration(self, test_attendant_user)
+        test_attendant_user_login = user_login(self, attendant_user_login)
+        response_content = json.loads(test_attendant_user_login.data.decode('utf-8'))
+        token = response_content["access_token"]
+        resp = get_all_sales(self, token)
+        response_data = json.loads(resp.data.decode())
+        self.assertEqual(response_data['message'], "Admin rights required!")
+
     def test_attendant_mget_specific_sale_item(self):
         user_registration(self, test_attendant_user)
         test_attendant_user_login = user_login(self, attendant_user_login)

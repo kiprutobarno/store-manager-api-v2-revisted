@@ -24,7 +24,7 @@ class User:
         """This function returns particulars of all users in users table"""
         conn=db()
         cursor=conn.cursor()
-        cursor.execute("""SELECT * FROM users""")
+        cursor.execute("""SELECT user_id, email, is_admin, date_created FROM users""")
         data=cursor.fetchall()
         users=[]
         for i, items in enumerate(data):
@@ -42,7 +42,7 @@ class User:
         """This method returns particulars of a specific user in users table"""
         conn=db()
         cursor=conn.cursor()
-        cursor.execute("""SELECT * FROM users WHERE user_id={}""".format(user_id))
+        cursor.execute("""SELECT user_id, email, is_admin, date_created FROM users WHERE user_id={}""".format(user_id))
         users=[]
         for i, items in enumerate(cursor.fetchall()): 
             user_id, email, is_admin, date_created=items

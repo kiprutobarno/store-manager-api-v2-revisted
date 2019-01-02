@@ -22,10 +22,18 @@ class UserTestCase(BaseTestCase):
         admin_login = user_login(self, admin_user_login)
         response_content = json.loads(admin_login.data.decode('utf-8'))
         token = response_content["access_token"]
-        print(response_content)
         resp = user_logout(self, token)
         response_data = json.loads(resp.data.decode())
         self.assertEqual(response_data['message'], "Successfully logged out")
+    
+    def test_admin_logout_invalid(self):
+        user_registration(self, test_admin_user)
+        admin_login = user_login(self, admin_user_login)
+        response_content = json.loads(admin_login.data.decode('utf-8'))
+        token = response_content["access_token"]
+        user_logout(self, token)
+        resp = user_logout(self, token)
+        response_data = json.loads(resp.data.decode())
 
     def test_attendant_create(self):
         resp = user_registration(self, test_attendant_user)
@@ -114,6 +122,19 @@ class UserTestCase(BaseTestCase):
         response = json.loads(resp.data.decode())
         self.assertTrue(
             response['message'] == "password is too short, it should be more than 6 characters!")
+
+    def test_acget_non_existent_users(self):
+        response = get_all_users(self)
+        self.assertEqual(response.status_code, 404)
+        resp = json.loads(response.data.decode())
+        self.assertTrue(resp['message'] == "Sorry, no user(s) available")
+    def test_get_all_users(self):
+        response = get_all_users(self)
+        self.assertEqual(response.status_code, 200) 
+
+    def test_get_specific_user(self):
+        response = get_specific_user(self)
+        self.assertEqual(response.status_code, 200) 
 
     def teardown(self):
         super(UserTestCase, self).teardown()

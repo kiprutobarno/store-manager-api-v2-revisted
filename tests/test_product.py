@@ -187,6 +187,15 @@ class ProductTestCase(BaseTestCase):
         response_data = json.loads(resp.data.decode())
         self.assertEqual(response_data['message'], "Update successful")
 
+    def test_update_non_existent_product(self):
+        user_registration(self, test_admin_user)
+        admin_login = user_login(self, admin_user_login)
+        response_content = json.loads(admin_login.data.decode('utf-8'))
+        token = response_content["access_token"]
+        resp = product_update(self, update_non_existent_product, token)
+        response_data = json.loads(resp.data.decode())
+        self.assertEqual(response_data['message'], "Sorry, such a product does not exist")
+
     def test_update_product_with_missing_product_name_key(self):
         user_registration(self, test_admin_user)
         admin_login = user_login(self, admin_user_login)

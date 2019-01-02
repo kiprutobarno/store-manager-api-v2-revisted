@@ -33,12 +33,12 @@ def create_app(config_name):
             'is_admin': identity
         }
 
-    # check if token exists blacklist table
+    # check if token exists in blacklist table
     @jwt.token_in_blacklist_loader
     def check_if_token_in_blacklist(decrypted_token):
         jti = decrypted_token['jti']
         if Blacklist.search(jti):
-            return True
+            return jti
 
     # register blueprint
     app.register_blueprint(v1_blueprint)

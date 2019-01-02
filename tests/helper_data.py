@@ -125,6 +125,14 @@ update_product = json.dumps(dict(
     unit_price=50.00
 ))
 
+update_non_existent_product = json.dumps(dict(
+    product_id=10,
+    product_name='tea',
+    category='beverages',
+    quantity=100,
+    unit_price=50.00
+))
+
 sale = json.dumps(dict(
     product_id=2,
     quantity=1
