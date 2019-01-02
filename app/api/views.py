@@ -16,8 +16,6 @@ def admin_required(fn):
         return fn(*args, **kwargs)
     return wrapper
 
-# def jwt_holder():
-#     return verify_jwt_in_request()
 
 def attendant_required(fn):
     @wraps(fn)
@@ -29,10 +27,9 @@ def attendant_required(fn):
         return fn(*args, **kwargs)
     return wrapper
 
-# print(get_jwt_claims()['is_admin'])
 
 def user(email, is_admin, password):
-    """ This function returns true if a user is created successfully """
+    # """ This function returns true if a user is created successfully """
     email=email
     is_admin=is_admin
     password=password
@@ -41,7 +38,7 @@ def user(email, is_admin, password):
     return True
 
 def product_validation(product_name, category, quantity, price):
-    """ This function returns validated product details """
+    # """ This function returns validated product details """
     product_name = product_name
     category=category
     quantity=quantity
@@ -50,12 +47,12 @@ def product_validation(product_name, category, quantity, price):
     return validated_product
 
 def product_create(product_name, category, quantity, price):
-    """ This function returns a created product """
+    # """ This function returns a created product """
     ValidateProduct.validate(product_name, category, quantity, price)
     return Product.create_product(product_name, category, quantity, price)
 
 def product_update(product_name, category, quantity, price, product_id):
-    """ This function returns an updated product """
+    # """ This function returns an updated product """
     product_validation(product_name, category, quantity, price)
     return Product.update_product(product_name, category, quantity, price, product_id)
 
@@ -123,7 +120,7 @@ class Products(Resource):
     """ Product view """
     @admin_required
     def post(self):
-        """ Only admin can add a product """
+        # """ Only admin can add a product """
         try:
             data = request.get_json()
             product_name=data['product_name']
@@ -136,13 +133,13 @@ class Products(Resource):
 
     @jwt_required
     def get(self):
-        """ admin and an attendant should be able to retrieve all products """
+        # """ admin and an attendant should be able to retrieve all products """
         if len(Product.get_products()) > 0:
             return make_response(jsonify({'message': 'Success','products': Product.get_products()}), 200)
         return make_response(jsonify({'message': 'No product record(s) available'}), 404)
 
 class GetSpecificProduct(Resource):
-    """ Get a specific product """
+    # """ Get a specific product """
 
     @jwt_required
     def get(self, product_id):
@@ -151,7 +148,7 @@ class GetSpecificProduct(Resource):
         return make_response(jsonify({ "message": "Sorry, such a product does not exist"}), 404)
 
 class UpdateProduct(Resource):
-    """ Update a specific product """
+    # """ Update a specific product """
 
     @jwt_required
     def put(self, product_id):
@@ -167,7 +164,7 @@ class UpdateProduct(Resource):
             return error_handling(error)
 
 class DeleteProduct(Resource):
-    """ Delete a specific product """
+    # """ Delete a specific product """
 
     @admin_required
     def delete(self, product_id):
@@ -178,7 +175,7 @@ class DeleteProduct(Resource):
         return make_response(jsonify({'message': 'Sorry, such a product does not exist!'}), 404)
 
 class Sales(Resource):
-    """Sales class"""
+    # """Sales class"""
 
     @attendant_required
     def post(self):
@@ -197,13 +194,13 @@ class Sales(Resource):
 
     @admin_required
     def get(self):
-        """ admin should be able to retrieve all sales """
+        # """ admin should be able to retrieve all sales """
         if len(Sale.get_sales()) > 0:
             return make_response(jsonify({'message': 'Success','sales': Sale.get_sales()}), 200)
         return make_response(jsonify({'message': 'No sale record(s) available'}), 200)
 
 class GetSpecificSale(Resource):
-    """ Get a specific sale item """
+    # """ Get a specific sale item """
 
     @attendant_required
     def get(self, sale_id):
