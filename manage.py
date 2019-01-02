@@ -1,8 +1,8 @@
 import os
 import psycopg2
 
-# url = os.environ.get('TEST_DATABASE_URL')
-url = "dbname='api_test' host='127.0.0.1' port='5432' user='admin' password='admin123'"
+url = os.environ.get('TEST_DATABASE_URL')
+# url = "dbname='api_test' host='127.0.0.1' port='5432' user='admin' password='admin123'"
 
 def connection(url):
     """This function creates a connection to the databse"""
