@@ -32,7 +32,7 @@ def destroy_tables():
 
 
 def destroy_queries():
-    """This function returns a list of 'destroy table' queries"""
+    # """This function returns a list of 'destroy table' queries"""
     delete_users = """drop table if exists users;"""
     delete_products = """drop table if exists products;"""
     delete_sales = """drop table if exists sales;"""
