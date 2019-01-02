@@ -1,7 +1,7 @@
 import os
 import psycopg2
 
-url = os.environ.get('DATABASE_URL')
+url = os.environ.get('TEST_DATABASE_URL')
 
 def connection(url):
     """This function creates a connection to the databse"""
