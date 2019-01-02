@@ -59,13 +59,13 @@ def product_update(product_name, category, quantity, price, product_id):
     product_validation(product_name, category, quantity, price)
     return Product.update_product(product_name, category, quantity, price, product_id)
 
-def available(item, yes, no):
-    item=item
+def available(items, yes, no):
+    items=items
     yes=yes
     no=no
-    if len(item) > 0:
-        return yes
-    return no
+    if items:
+        return make_response(yes)
+    return make_response(no)
 
 def validate_sale(product_id, quantity):
     """ validate sale """
@@ -144,10 +144,13 @@ class Products(Resource):
     @jwt_required
     def get(self):
         """ admin and an attendant should be able to retrieve all products """
+        products = len(Product.get_products()) > 0
         # if len(Product.get_products()) > 0:
         #     return make_response(jsonify({'message': 'Success','products': Product.get_products()}), 200)
         # return make_response(jsonify({'message': 'No product record(s) available'}), 404)
-        available(Product.get_products(), make_response(jsonify({'message': 'Success','products': Product.get_products()}), 200), make_response(jsonify({'message': 'No product record(s) available'}), 404) )
+        t = (jsonify({'message': 'Success','products': Product.get_products()}), 200)
+        f = (jsonify({'message': 'No product record(s) available'}), 404)
+        available(products, t, f )
 
 class GetSpecificProduct(Resource):
     # """ Get a specific product """
