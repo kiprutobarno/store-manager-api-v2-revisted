@@ -59,14 +59,6 @@ def product_update(product_name, category, quantity, price, product_id):
     product_validation(product_name, category, quantity, price)
     return Product.update_product(product_name, category, quantity, price, product_id)
 
-# def available(items, yes, no):
-#     items=items
-#     yes=yes
-#     no=no
-#     if items:
-#         return make_response(yes)
-#     return make_response(no)
-
 def validate_sale(product_id, quantity):
     """ validate sale """
     return ValidateSale.validate(product_id, quantity)
@@ -144,16 +136,12 @@ class Products(Resource):
     @jwt_required
     def get(self):
         """ admin and an attendant should be able to retrieve all products """
-        # products = len(Product.get_products()) > 0
         if len(Product.get_products()) > 0:
             return make_response(jsonify({'message': 'Success','products': Product.get_products()}), 200)
         return make_response(jsonify({'message': 'No product record(s) available'}), 404)
-        # t = (jsonify({'message': 'Success','products': Product.get_products()}), 200)
-        # f = (jsonify({'message': 'No product record(s) available'}), 404)
-        # available(products, t, f )
 
 class GetSpecificProduct(Resource):
-    # """ Get a specific product """
+    """ Get a specific product """
 
     @jwt_required
     def get(self, product_id):
@@ -196,10 +184,8 @@ class Sales(Resource):
         try:
             data=request.get_json()
             ValidateSale.validate(data['product_id'], data['quantity'])
-            # validate_sale(data['product_id'], data['quantity'])
             if Product.get_specific_product(data['product_id']):
                 if Sale.create_sale(data['product_id'], data['quantity']):
-                # if product_sale(data['product_id'], data['quantity']):
                     return make_response(jsonify(Sale.create_sale(data['product_id'], data['quantity'])), 201)
                 return make_response(jsonify({'message': 'Insufficient stock'}), 200)
             return make_response(jsonify({'message': 'Warning! You are attempting to sale a non-existent product'}), 200)
@@ -214,7 +200,7 @@ class Sales(Resource):
         return make_response(jsonify({'message': 'No sale record(s) available'}), 200)
 
 class GetSpecificSale(Resource):
-    # """ Get a specific sale item """
+    """ Get a specific sale item """
 
     @attendant_required
     def get(self, sale_id):
