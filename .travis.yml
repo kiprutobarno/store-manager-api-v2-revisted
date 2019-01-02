@@ -5,12 +5,11 @@ python:
 env:
   - TEST_DATABASE_URL="dbname='api_test' host='127.0.0.1' port='5432' user='admin' password='admin123'"
 
-# install dependencies
 install:
   - pip install -r requirements.txt
   - pip install psycopg2-binary
   - pip install codecov
-# command to run tests
+
 services:
   - postgresql
 
@@ -24,7 +23,6 @@ before_script:
 script:
   - pytest --cov=app tests/
 
-# then post the results to coveralls
 after_success:
   - coveralls
   - codecov
