@@ -59,6 +59,13 @@ def product_update(product_name, category, quantity, price, product_id):
     product_validation(product_name, category, quantity, price)
     return Product.update_product(product_name, category, quantity, price, product_id)
 
+def available(item, yes, no):
+    item=item
+    yes=yes
+    no=no
+    if len(item) > 0:
+        return yes
+    return no
 
 def validate_sale(product_id, quantity):
     """ validate sale """
@@ -130,16 +137,17 @@ class Products(Resource):
             category=data['category']
             quantity=data['quantity']
             unit_price=data['unit_price']
-            return make_response(jsonify({'message': 'Success','product': product_create(product_name, category, quantity, unit_price)}), 201)
+            return make_response(jsonify({'message': 'Success','product': product_create(product_name, category, quantity, unit_price)}), 201,)
         except KeyError as error:
             return error_handling(error)
 
     @jwt_required
     def get(self):
         """ admin and an attendant should be able to retrieve all products """
-        if len(Product.get_products()) > 0:
-            return make_response(jsonify({'message': 'Success','products': Product.get_products()}), 200)
-        return make_response(jsonify({'message': 'No product record(s) available'}), 404)
+        # if len(Product.get_products()) > 0:
+        #     return make_response(jsonify({'message': 'Success','products': Product.get_products()}), 200)
+        # return make_response(jsonify({'message': 'No product record(s) available'}), 404)
+        available(Product.get_products(), make_response(jsonify({'message': 'Success','products': Product.get_products()}), 200), make_response(jsonify({'message': 'No product record(s) available'}), 404) )
 
 class GetSpecificProduct(Resource):
     # """ Get a specific product """
