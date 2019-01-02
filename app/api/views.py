@@ -142,7 +142,7 @@ class Products(Resource):
         return make_response(jsonify({'message': 'No product record(s) available'}), 404)
 
 class GetSpecificProduct(Resource):
-    """ Get a specific product """
+    # """ Get a specific product """
 
     @jwt_required
     def get(self, product_id):
@@ -203,7 +203,7 @@ class Sales(Resource):
         return make_response(jsonify({'message': 'No sale record(s) available'}), 200)
 
 class GetSpecificSale(Resource):
-    """ Get a specific sale item """
+    # """ Get a specific sale item """
 
     @attendant_required
     def get(self, sale_id):
